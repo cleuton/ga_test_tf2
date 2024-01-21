@@ -1,0 +1,30 @@
+name: Terraform Kubernetes Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    - name: Set up Kubeconfig 
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+      run: |
+        mkdir -p $HOME/.kube 
+        echo "$KUBE_CONFIG_DATA" | base64 -d > $HOME/.kube/config
+
+    - name: Terraform Init
+      run: terraform init
+      working-directory: modules
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
+      working-directory: modules
