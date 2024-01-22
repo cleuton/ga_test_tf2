@@ -3,6 +3,14 @@ provider "kubernetes" {
   config_path        = "~/.kube/config"  # Caminho para o arquivo de configuração do kubectl
 }
 
+# Configura o backend para armazenar o estado do terraform
+terraform {
+  backend "kubernetes" {
+    secret_suffix    = "state"
+    config_path      = "~/.kube/config"
+  }
+}
+
 # Defina um recurso Deployment para o Nginx
 resource "kubernetes_deployment" "nginx" {
   metadata {
