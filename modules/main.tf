@@ -3,7 +3,7 @@ provider "kubernetes" {
   config_path        = "~/.kube/config"  # Caminho para o arquivo de configuração do kubectl
 }
 
-# Configura o backend para armazenar o estado do terraform
+# Configura o backend para armazenar o estado do terraform no cluster k8s como um secret
 terraform {
   backend "kubernetes" {
     secret_suffix    = "state"
